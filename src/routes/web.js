@@ -7,6 +7,7 @@ const initWebRoutes = (app) => {
     routes.get("/", HomeController.Handle_Home);
     routes.get("/user", HomeController.Handle_User);
     routes.get("/signup", HomeController.Handle_Sign_up);
+    routes.post("/create_user", HomeController.Handle_Create_User);
     // routes.get("/store", HomeController.Handle_Store);
 
     return app.use("/", routes);
