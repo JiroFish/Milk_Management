@@ -6,8 +6,9 @@ const Handle_Home = (req, res) => {
 const Handle_User = (req, res) => {
     return res.render("user.ejs");
 }
-const Handle_Sign_up = (req, res) => {
-    return res.render("sign_up.ejs");
+const Handle_Sign_up = async (req, res) => {
+    let listUser = await userService.readUser();
+    return res.render("sign_up.ejs", { listUser });
 }
 const Handle_Create_User = (req, res) => {
     let email = req.body.email;
