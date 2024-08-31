@@ -22,7 +22,7 @@ const Handle_Create_User = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     conn.query(
-        'insert User(email,password) values (?,?)', [email, password],
+        'insert user_milk(email,password) values (?,?)', [email, password],
         function (err, results, fields) {
             if (err) {
                 console.log(err);
