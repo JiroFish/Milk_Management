@@ -8,26 +8,18 @@ const Handle_User = (req, res) => {
 }
 const Handle_Sign_up = async (req, res) => {
     let listUser = await userService.readUser();
+    await userService.deleteUser();
     return res.render("sign_up.ejs", { listUser });
 }
 const Handle_Create_User = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
-<<<<<<< HEAD
-    conn.query(
-        'insert user_milk(email,password) values (?,?)', [email, password],
-        function (err, results, fields) {
-            if (err) {
-                console.log(err);
-            }
-            console.log(results);
-        }
-    )
-
-
-=======
     userService.createUser(email, password);
->>>>>>> 1a86e456b70771fbf56305c49450f21b3c2893af
+    res.redirect("/signup");
+}
+const Handle_delete = (res,req) => {
+    userService.deleteUser(3);
+    res.redirect("/signup");
 }
 module.exports = {
     Handle_Home,
