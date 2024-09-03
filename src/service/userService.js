@@ -8,16 +8,16 @@ const hashPassword = (userPassword) => {
     return hash;
 }
 
-const createUser =async (email, password) => {
+const createUser = async (email, password) => {
     const conn = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        database: 'test',Promise:Bluebird
+        database: 'test', Promise: Bluebird
     })
     try {
         let hashedPassword = hashPassword(password);
-        const [rows, fields] = await conn.execute('insert user_milk(email,password) values (?,?)', [email, hashedPassword]);
-        
+        const [rows, fields] = await conn.execute('insert user(email,password) values (?,?)', [email, hashedPassword]);
+
     } catch (err) {
         console.log(err);
     }
@@ -27,27 +27,27 @@ const readUser = async () => {
     const conn = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        database: 'test'
+        database: 'test', Promise: Bluebird
     })
     let user = [];
     try {
-        const [rows, fields] = await conn.execute("select * from user_milk");
+        const [rows, fields] = await conn.execute("select * from user");
         return rows;
     } catch (err) {
         console.log(err);
     }
 }
 
-const deleteUser = async(id) =>{
+const deleteUser = async (id) => {
     const conn = await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        database: 'test'
+        database: 'test', Promise: Bluebird
     })
     try {
-        const [rows, fields] = await conn.execute("delete from user_milk where id=?",[id]);
+        const [rows, fields] = await conn.execute("delete from user where id=?", [id]);
         return rows;
     } catch (err) {
     }
 }
-module.exports = { createUser, readUser,deleteUser }
+module.exports = { createUser, readUser, deleteUser }

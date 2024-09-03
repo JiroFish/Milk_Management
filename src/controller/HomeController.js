@@ -15,15 +15,16 @@ const Handle_Create_User = (req, res) => {
     let email = req.body.email;
     let password = req.body.password;
     userService.createUser(email, password);
-    res.redirect("/signup");
+    return res.redirect("/signup");
 }
-const Handle_delete = (res,req) => {
-    userService.deleteUser(3);
-    res.redirect("/signup");
+const Handle_delete = async (req, res) => {
+    await userService.deleteUser(req.params.id);
+    return res.redirect("/signup");
 }
 module.exports = {
     Handle_Home,
     Handle_User,
     Handle_Sign_up,
-    Handle_Create_User
+    Handle_Create_User,
+    Handle_delete
 }
