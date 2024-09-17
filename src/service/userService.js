@@ -16,7 +16,7 @@ const createUser = async (email, password) => {
     })
     try {
         let hashedPassword = hashPassword(password);
-        const [rows, fields] = await conn.execute('insert user(email,password) values (?,?)', [email, hashedPassword]);
+        const [rows, fields] = await conn.execute('insert Users(email,password) values (?,?)', [email, hashedPassword]);
 
     } catch (err) {
         console.log(err);
@@ -31,7 +31,7 @@ const readUser = async () => {
     })
     let user = [];
     try {
-        const [rows, fields] = await conn.execute("select * from user");
+        const [rows, fields] = await conn.execute("select * from Users");
         return rows;
     } catch (err) {
         console.log(err);
@@ -45,7 +45,7 @@ const deleteUser = async (id) => {
         database: 'test', Promise: Bluebird
     })
     try {
-        const [rows, fields] = await conn.execute("delete from user where id=?", [id]);
+        const [rows, fields] = await conn.execute("delete from Users where id=?", [id]);
         return rows;
     } catch (err) {
     }
