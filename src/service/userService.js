@@ -13,7 +13,7 @@ const createUser = async (email, password) => {
     try {
         let hashedPassword = hashPassword(password);
         // const [rows, fields] = await conn.execute('insert Users(email,password) values (?,?)', [email, hashedPassword]);
-        await db.User.create({
+        await db.Users.create({
             email: email,
             password: hashedPassword,
             username: 'aa'
@@ -29,22 +29,44 @@ const readUser = async () => {
     //     user: 'root',
     //     database: 'test', Promise: Bluebird
     // })
-    let user = [];
+    // const [rows, fields] = await conn.execute("select * from Users");
+    // return rows;
+
+
+    // let user = [];
+    // try {
+    //     user = await db.Users.findAll();
+    //     return user;
+    // } catch (err) {
+    //     console.log('>>>>>lỗi', err);
+    // }
+
+
+    let ur = [];
     try {
-        // const [rows, fields] = await conn.execute("select * from Users");
-        // return rows;
-        user = await db.User.findAll();
-        return user;
+        ur = await db.Users.findAll({
+            where: { id_role: 1 },
+            attributes: ['username', 'email'],
+            include: {
+                model: db.Roles,
+                attributes: ['roleName']
+            },
+            raw: true,
+            nest: true
+        })
+        console.log(ur)
+        return ur;
     } catch (err) {
-        console.log(err);
+        console.log(">>>>Lỗi: ", err)
     }
+
 }
 
 const deleteUser = async (id) => {
     try {
         // const [rows, fields] = await conn.execute("delete from Users where id=?", [id]);
         // return rows;
-        await db.User.destroy({
+        await db.Users.destroy({
             where: { id: id }
         })
     } catch (err) {

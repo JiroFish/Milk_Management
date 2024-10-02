@@ -1,0 +1,9 @@
+npx sequelize-cli model:generate --name Users --attributes id_user:interger email:string password:string username:string age:interger sex:string address:string phone:string id_role:interger
+npx sequelize-cli model:generate --name Roles --attributes id_role:interger roleName:string description:text
+npx sequelize-cli model:generate --name Roles_Accesses --attributes id_role:interger id_access:interger
+npx sequelize-cli model:generate --name Accesses --attributes id_access:interger accessName:string description:text
+npx sequelize-cli model:generate --name Carts --attributes id_cart:interger quantity:interger id_order:interger
+npx sequelize-cli model:generate --name OldOrders --attributes id_old_order:interger id_cart:interger id_product_bought:interger quantity_bought:interger total_price:string
+npx sequelize-cli model:generate --name Carts_Products --attributes id_cart:interger id_product:interger
+npx sequelize-cli model:generate --name Products --attributes id_product:interger icon:s
+npx sequelize-cli model:generate --name User --attributes
