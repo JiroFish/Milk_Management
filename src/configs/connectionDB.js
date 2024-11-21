@@ -1,5 +1,5 @@
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('milk_managament', 'root', null, {
+const sequelize = new Sequelize('jwt_database', 'root', null, {
     host: 'localhost',
     dialect: 'mysql'
 })

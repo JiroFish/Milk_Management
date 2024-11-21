@@ -1,7 +1,9 @@
 import userService from "../service/userService";
 
 const Handle_Home = (req, res) => {
-    return res.render("home.ejs");
+    return res.status(200).json({
+        message: "ok"
+    })
 }
 const Handle_User = (req, res) => {
     return res.render("user.ejs");

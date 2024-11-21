@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Roles.hasMany(models.Users, { foreignKey: 'id_role' });
+      Roles.hasMany(models.Users, { foreignKey: 'idRole', targetKey: 'idRole' });
+      Roles.belongsToMany(models.Accesses, { through: 'Roles_Accesses', foreignKey: 'idRole', otherKey: 'idAccess' });
     }
   }
   Roles.init({
@@ -19,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Roles',
+    id: false,
+    defaultScope: {  // Cấu hình mặc định cho mọi truy vấn
+      attributes: { exclude: ['id'] }
+    }
   });
   return Roles;
 };
