@@ -17,6 +17,16 @@ const emailExist = async (emailNew) => {
     }
     return false;
 }
+const usernameExist = async (usernameNew) => {
+    let user_Name = await db.Users.findOne({
+        where: { username: usernameNew }
+    })
+
+    if (user_Name) {
+        return true;
+    }
+    return false;
+}
 
 const createUser = async (userInfo) => {
     try {
@@ -27,11 +37,19 @@ const createUser = async (userInfo) => {
                 EC: 2
             }
         }
-        let hashedPassword = hashPassword(password);
+        let checkUsername = await usernameExist(userInfo.username);
+        if (checkUsername) {
+            return {
+                EM: "Username đã tồn tại",
+                EC: 2
+            }
+        }
+        let hashedPassword = hashPassword(userInfo.password);
         await db.Users.create({
-            email: email,
+            email: userInfo.email,
             password: hashedPassword,
-            username: 'aa'
+            username: userInfo.username,
+            phone: userInfo.phone
         })
         return {
             EM: "Tạo thành công người dùng",
@@ -40,6 +58,45 @@ const createUser = async (userInfo) => {
 
     } catch (err) {
         console.log(err);
+        return {
+            EM: "Lỗi trong khi thực hiện thêm...",
+            EC: -2
+        }
+    }
+}
+
+const checkPassword = (passInput, passHashedInDB) => {
+    return bcrypt.compare(passInput, passHashedInDB)
+}
+
+const userLogin = async (userInfo) => {
+    try {
+        let email = await emailExist(userInfo.email);
+        if (!email) {
+            return {
+                EM: "Email không tồn tại",
+                EC: 2
+            }
+        }
+        console.log("11111");
+
+        let passInDB = await db.Users.findOne({
+            where: { email: userInfo.email }
+        })
+
+        let passwordNow = await checkPassword(userInfo.password, passInDB.password);
+        if (!passwordNow) {
+            return {
+                EM: "Sai mật khẩu",
+                EC: 2
+            }
+        }
+        return {
+            EM: "Đăng nhập thành công",
+            EC: 0
+        }
+    } catch (error) {
+        console.log(error);
         return {
             EM: "Lỗi trong khi thực hiện thêm...",
             EC: -2
@@ -78,4 +135,4 @@ const deleteUser = async (id) => {
     } catch (err) {
     }
 }
-module.exports = { createUser, readUser, deleteUser }
+module.exports = { createUser, readUser, deleteUser, userLogin }

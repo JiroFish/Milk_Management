@@ -24,5 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       attributes: { exclude: ['id'] }
     }
   });
+  // Accesses.removeAttribute('id');
   return Accesses;
 };
