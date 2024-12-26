@@ -68,7 +68,6 @@ const createUser = async (userInfo) => {
 const checkPassword = (passInput, passHashedInDB) => {
     return bcrypt.compare(passInput, passHashedInDB)
 }
-
 const userLogin = async (userInfo) => {
     try {
         let email = await emailExist(userInfo.email);
@@ -78,8 +77,6 @@ const userLogin = async (userInfo) => {
                 EC: 2
             }
         }
-        console.log("11111");
-
         let passInDB = await db.Users.findOne({
             where: { email: userInfo.email }
         })
@@ -108,8 +105,7 @@ const readUser = async () => {
     let ur = [];
     try {
         ur = await db.Users.findAll({
-            where: { id_role: 1 },
-            attributes: ['username', 'email'],
+            attributes: ['username', 'email', 'address', 'phone'],
             include: {
                 model: db.Roles,
                 attributes: ['roleName']
@@ -135,4 +131,41 @@ const deleteUser = async (id) => {
     } catch (err) {
     }
 }
-module.exports = { createUser, readUser, deleteUser, userLogin }
+
+const getAPageUsers = async (page) => {
+    let limit = 5;
+    let offset = (page - 1) * limit;
+    // let data = [];
+    try {
+        // data = await db.Users.findAll({
+        const { count, rows } = await db.Users.findAndCountAll({
+            attributes: ['username', 'email', 'address', 'phone'],
+            include: {
+                model: db.Roles,
+                attributes: ['roleName']
+            },
+            col: 'idUser', // Chỉ định cột đếm
+            offset: offset,
+            limit: limit,
+            raw: true,
+            nest: true
+        })
+        const pages = Math.ceil(count / limit);
+        const data = {
+            totalRows: count,
+            totalPages: pages,
+            data: rows
+        }
+        console.log("check api page", data);
+        return {
+            EM: "Lấy thông tin thành công (service page)",
+            EC: 0,
+            DT: data
+        };
+    } catch (err) {
+        console.log(">>>>Lỗi: ", err)
+    }
+
+}
+
+module.exports = { createUser, readUser, deleteUser, userLogin, getAPageUsers }
