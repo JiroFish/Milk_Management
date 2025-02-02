@@ -1,5 +1,6 @@
 import express from "express";
 import ApiController from "../controller/ApiController";
+import ApiRolesController from "../controller/ApiRolesController";
 const routes = express.Router();
 
 
@@ -10,6 +11,11 @@ const initApiRoutes = (app) => {
 
     routes.get("/users", ApiController.getUsers);
     routes.get("/userspage", ApiController.getAPageOfUsers);
+    routes.put("/user/update:id", ApiController.updateUserWithId);
+    routes.delete("/user/delete", ApiController.deleteUser);
+
+    routes.get("/users/roles", ApiRolesController.readRoles);
+
     return app.use("/api/", routes);
 }
 

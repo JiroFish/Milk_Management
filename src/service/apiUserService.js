@@ -126,9 +126,20 @@ const deleteUser = async (id) => {
         // const [rows, fields] = await conn.execute("delete from Users where id=?", [id]);
         // return rows;
         await db.Users.destroy({
-            where: { id: id }
+            where: { idUser: id }
         })
+        return {
+            EM: "Xóa thông tin thành công (service page)",
+            EC: 0,
+            DT: ""
+        }
     } catch (err) {
+        console.log(err);
+        return {
+            EM: "error from Service",
+            EC: -2,
+            DT: ""
+        }
     }
 }
 
@@ -139,7 +150,7 @@ const getAPageUsers = async (page) => {
     try {
         // data = await db.Users.findAll({
         const { count, rows } = await db.Users.findAndCountAll({
-            attributes: ['username', 'email', 'address', 'phone'],
+            attributes: ['idUser', 'username', 'email', 'address', 'phone'],
             include: {
                 model: db.Roles,
                 attributes: ['roleName']

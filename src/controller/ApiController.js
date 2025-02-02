@@ -99,6 +99,52 @@ const getAPageOfUsers = async (req, res) => {
         });
     }
 }
+
+const updateUserWithId = async (req, res) => {
+    try {
+        console.log("check req update", req.params.id, req.body);
+        // let data = await apiUserService.deleteUser(req.body.idUser);
+        return res.status(200).json({
+            EM: "nhận thành công",
+            EC: 0,
+            DT: ""
+            // EM: data.EM,
+            // EC: data.EC,
+            // DT: data.DT
+        })
+        return;
+    } catch (error) {
+        return res.status(500).json({
+            EM: "Lỗi server ở ApiController...",
+            EC: "-1",
+            DT: ""
+        })
+    }
+}
+const deleteUser = async (req, res) => {
+    try {
+        if (!req.body.idUser) {
+            return res.status(200).json({
+                EM: "Thiếu thông tin",
+                EC: 1,
+                DT: ""
+            })
+        }
+        let data = await apiUserService.deleteUser(req.body.idUser);
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: data.DT
+        })
+    } catch (error) {
+        return res.status(500).json({
+            EM: "Lỗi server ở ApiController...",
+            EC: "-1",
+            DT: ""
+        })
+    }
+}
+
 module.exports = {
-    handleAPI, handleSignup, handleLogin, getUsers, getAPageOfUsers
+    handleAPI, handleSignup, handleLogin, getUsers, getAPageOfUsers, updateUserWithId, deleteUser
 }
