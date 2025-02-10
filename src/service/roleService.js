@@ -4,8 +4,8 @@ import db from '../models/index';
 const getRoles = async () => {
     try {
         let data = await db.Roles.findAll({
-            attributes: ['roleName', 'description'],
-            order: [['roleName', 'ASC']],
+            attributes: ['idRole', 'roleName', 'description'],
+            // order: [['roleName', 'ASC']],
             raw: true,
             nest: true
         });

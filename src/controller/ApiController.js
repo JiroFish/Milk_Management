@@ -100,6 +100,43 @@ const getAPageOfUsers = async (req, res) => {
     }
 }
 
+const createUserFullData = async (req, res) => {
+    try {
+        let reqBody = req.body.dataUserFull;
+        await console.log("check req create ful user", reqBody);
+        if (!reqBody.email || !reqBody.username || !reqBody.password) {
+            return res.status(200).json({
+                EM: "Thiếu thông tin",
+                EC: 1,
+                DT: ""
+            })
+        }
+
+        if (req.body.password && req.body.password.length < 8) {
+            return res.status(200).json({
+                EM: "Password cần có ít nhất 8 ký tự",
+                EC: 1,
+                DT: ""
+            })
+        }
+
+        let data = await apiUserService.createUserFull(reqBody);
+        return res.status(200).json({
+            EM: data.EM,
+            EC: data.EC,
+            DT: ""
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            EM: "Lỗi server ở ApiController...",
+            EC: "-1",
+            DT: ""
+        });
+
+    }
+}
+
 const updateUserWithId = async (req, res) => {
     try {
         console.log("check req update", req.params.id, req.body);
@@ -146,5 +183,5 @@ const deleteUser = async (req, res) => {
 }
 
 module.exports = {
-    handleAPI, handleSignup, handleLogin, getUsers, getAPageOfUsers, updateUserWithId, deleteUser
+    handleAPI, handleSignup, handleLogin, getUsers, getAPageOfUsers, updateUserWithId, deleteUser, createUserFullData
 }

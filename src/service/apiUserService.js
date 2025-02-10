@@ -174,9 +174,54 @@ const getAPageUsers = async (page) => {
             DT: data
         };
     } catch (err) {
-        console.log(">>>>Lỗi: ", err)
+        console.log(">>>>Lỗi: ", err);
+        return {
+            EM: "error from Service",
+            EC: -2,
+            DT: ""
+        }
     }
-
 }
 
-module.exports = { createUser, readUser, deleteUser, userLogin, getAPageUsers }
+const createUserFull = async (dataUserFull) => {
+    try {
+        console.log("check data service ", dataUserFull);
+        let checkEmail = await emailExist(dataUserFull.email);
+        if (checkEmail) {
+            return {
+                EM: "Email đã tồn tại",
+                EC: 2
+            }
+        }
+        let checkUsername = await usernameExist(dataUserFull.username);
+        if (checkUsername) {
+            return {
+                EM: "Username đã tồn tại",
+                EC: 2
+            }
+        }
+        let hashedPassword = hashPassword(dataUserFull.password);
+        await db.Users.create({
+            email: dataUserFull.email,
+            password: hashedPassword,
+            username: dataUserFull.username,
+            phone: dataUserFull.phone,
+            gender: dataUserFull.gender,
+            idRole: dataUserFull.role,
+            address: dataUserFull.address
+        })
+        return {
+            EM: "Thêm thành công",
+            EC: 0,
+            DT: ""
+        };
+    } catch (error) {
+        return {
+            EM: "error from Service",
+            EC: -2,
+            DT: ""
+        }
+    }
+}
+
+module.exports = { createUser, readUser, deleteUser, userLogin, getAPageUsers, createUserFull }
