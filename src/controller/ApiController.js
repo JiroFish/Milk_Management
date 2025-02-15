@@ -139,17 +139,16 @@ const createUserFullData = async (req, res) => {
 
 const updateUserWithId = async (req, res) => {
     try {
-        console.log("check req update", req.params.id, req.body);
-        // let data = await apiUserService.deleteUser(req.body.idUser);
+        console.log("check req update", req.body);
+        let data = await apiUserService.updateUserWithId(req.body.data);
         return res.status(200).json({
-            EM: "nhận thành công",
-            EC: 0,
+            EM: data.EM,
+            EC: data.EC,
             DT: ""
             // EM: data.EM,
             // EC: data.EC,
             // DT: data.DT
         })
-        return;
     } catch (error) {
         return res.status(500).json({
             EM: "Lỗi server ở ApiController...",

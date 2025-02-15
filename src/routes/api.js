@@ -11,7 +11,7 @@ const initApiRoutes = (app) => {
 
     routes.get("/users", ApiController.getUsers);
     routes.get("/userspage", ApiController.getAPageOfUsers);
-    routes.put("/user/update:id", ApiController.updateUserWithId);
+    routes.put("/user/update", ApiController.updateUserWithId);
     routes.delete("/user/delete", ApiController.deleteUser);
     routes.post("/user/createFullUser", ApiController.createUserFullData);
 

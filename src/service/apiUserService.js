@@ -224,4 +224,34 @@ const createUserFull = async (dataUserFull) => {
     }
 }
 
-module.exports = { createUser, readUser, deleteUser, userLogin, getAPageUsers, createUserFull }
+const updateUserWithId = async (dataUpdate) => {
+    try {
+        console.log('check data Update trong Service', dataUpdate);
+        await db.Users.update({
+            username: dataUpdate.username,
+            email: dataUpdate.email,
+            address: dataUpdate.address,
+            idRole: dataUpdate.role,
+            gender: dataUpdate.gender,
+        },
+            {
+                where: { idUser: dataUpdate.idUser }
+            }
+        )
+        return {
+            EM: "nhận thông tin Edit trong Service thành công",
+            EC: 0,
+            DT: ""
+        };
+
+    } catch (error) {
+        return {
+            EM: "error from Service",
+            EC: -2,
+            DT: ""
+        }
+
+    }
+}
+
+module.exports = { createUser, readUser, deleteUser, userLogin, getAPageUsers, createUserFull, updateUserWithId }
