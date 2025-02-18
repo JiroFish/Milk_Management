@@ -71,6 +71,7 @@ const createUser = async (userInfo) => {
 const checkPassword = (passInput, passHashedInDB) => {
     return bcrypt.compare(passInput, passHashedInDB)
 }
+
 const userLogin = async (userInfo) => {
     try {
         let email = await emailExist(userInfo.email);
@@ -98,12 +99,11 @@ const userLogin = async (userInfo) => {
             userAccesses
         }
         let token = CreateJWTToken(payload);
-        console.log("thông tin accesses của user", userAccesses)
         return {
             EM: "Đăng nhập thành công",
             EC: 0,
             DT: {
-                access__token: token,
+                access_token: token,
                 data: userAccesses
             }
         }
