@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Accesses.init({
+    idAccess: {  // Định nghĩa idAccess là primary key
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
     roleName: DataTypes.STRING,
     description: DataTypes.TEXT
   }, {

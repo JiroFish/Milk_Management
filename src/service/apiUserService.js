@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
 import db from '../models/index';
+import { getAccessesAUser } from "./JWTservice"
+import { CreateJWTToken } from "../Middleware/JWTAction"
 const salt = bcrypt.genSaltSync(10);
 
 const hashPassword = (userPassword) => {
@@ -49,7 +51,8 @@ const createUser = async (userInfo) => {
             email: userInfo.email,
             password: hashedPassword,
             username: userInfo.username,
-            phone: userInfo.phone
+            phone: userInfo.phone,
+            idRole: 3
         })
         return {
             EM: "Tạo thành công người dùng",
@@ -88,14 +91,26 @@ const userLogin = async (userInfo) => {
                 EC: 2
             }
         }
+
+        let userAccesses = await getAccessesAUser(userInfo);
+        let payload = {
+            email: userInfo,
+            userAccesses
+        }
+        let token = CreateJWTToken(payload);
+        console.log("thông tin accesses của user", userAccesses)
         return {
             EM: "Đăng nhập thành công",
-            EC: 0
+            EC: 0,
+            DT: {
+                access__token: token,
+                data: userAccesses
+            }
         }
     } catch (error) {
         console.log(error);
         return {
-            EM: "Lỗi trong khi thực hiện thêm...",
+            EM: "Lỗi trong khi thực hiện Login...",
             EC: -2
         }
     }
