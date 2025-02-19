@@ -13,7 +13,7 @@ const CreateJWTToken = (payload) => {
     }
 }
 
-const EncodeJWT = (token) => {
+const decodeJWT = (token) => {
     let secretKey = process.env.JWTKEY;
     try {
         let decodedData = jwt.verify(token, secretKey);
@@ -25,6 +25,67 @@ const EncodeJWT = (token) => {
     }
 }
 
+const checkUserJWT = (req, res, next) => {
+    let cookies = req.cookies;
+    if (cookies && cookies.jwt) {
+        let token = cookies.jwt;
+        let decoded = decodeJWT(token);
+        if (decoded) {
+            req.user = decoded;
+            next();
+        } else {
+            return res.status(401).json({
+                EM: "Not authenticated JWT1",
+                EC: -1,
+                DT: ""
+            })
+        }
+    } else {
+        return res.status(401).json({
+            EM: "Not authenticated JWT2",
+            EC: -1,
+            DT: ""
+        })
+    }
+}
+
+const checkUserAccessible = (req, res, next) => {
+    if (req.user) {
+        let email = req.user.email.email;
+        let roles = req.user.userAccesses.Accesses;
+        let currentURL = req.path;
+        if (!roles || roles.length === 0) {
+            console.log("lỗi 1");
+            return res.status(403).json({
+                EM: "Do NOT have permission to access the feature",
+                EC: -1,
+                DT: ""
+            })
+        }
+        console.log("check currentURL", currentURL);
+        console.log("check roles", roles);
+        let canAccess = roles.some(item => { return item.accessName === currentURL });
+        if (canAccess === true) {
+            next();
+        } else {
+            console.log("lỗi 2");
+            return res.status(403).json({
+                EM: "Do NOT have permission to access the feature",
+                EC: -1,
+                DT: ""
+            })
+        }
+    } else {
+        console.log("lỗi 3");
+        return res.status(401).json({
+            EM: "Not authenticated JWT3",
+            EC: -1,
+            DT: ""
+        })
+    }
+}
+
+
 module.exports = {
-    CreateJWTToken, EncodeJWT
+    CreateJWTToken, decodeJWT, checkUserJWT, checkUserAccessible
 }
