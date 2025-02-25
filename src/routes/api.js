@@ -1,6 +1,7 @@
 import express from "express";
 import ApiController from "../controller/ApiController";
 import ApiRolesController from "../controller/ApiRolesController";
+import ApiProductsController from "../controller/ApiProductsController";
 const routes = express.Router();
 import { checkUserJWT, checkUserAccessible } from "../Middleware/JWTAction";
 
@@ -29,6 +30,8 @@ const initApiRoutes = (app) => {
     routes.post("/user/createFullUser", ApiController.createUserFullData);
 
     routes.get("/users/roles", ApiRolesController.readRoles);
+
+    routes.get("/home", ApiProductsController.getAPageOfProducts);
 
     return app.use("/api/", routes);
 }
